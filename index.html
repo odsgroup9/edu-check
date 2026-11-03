@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>우리 회사 법정의무교육 1분 진단</title>
+<meta name="description" content="인원수·업종 6문항으로 우리 회사가 실제로 해야 하는 법정의무교육과 과태료 리스크를 바로 확인하세요.">
+<style>
+  :root{--navy:#1f4e8c;--ink:#1d2433;--sub:#5b6475;--line:#d8e0ec;--bg:#f5f7fb;--warn:#a24d00;--warnbg:#fff2e6;--ok:#2c6e3f;--okbg:#eaf6ee;--gray:#8a93a3;}
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Pretendard","Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:720px;margin:0 auto;padding:28px 18px 60px}
+  header .brand{font-size:13px;color:var(--navy);font-weight:700;letter-spacing:.3px}
+  h1{font-size:26px;line-height:1.35;margin:6px 0 8px;letter-spacing:-.5px}
+  .lead{color:var(--sub);margin:0 0 22px;font-size:15px}
+  .card{background:#fff;border:1px solid var(--line);border-radius:14px;padding:20px 18px;margin-bottom:14px}
+  .q{margin-bottom:22px}
+  .q:last-child{margin-bottom:0}
+  .q h3{font-size:16px;margin:0 0 10px}
+  .q h3 span{color:var(--navy);margin-right:6px}
+  .opts{display:flex;flex-wrap:wrap;gap:8px}
+  .opts label{position:relative}
+  .opts input{position:absolute;opacity:0;pointer-events:none}
+  .opts span{display:inline-block;padding:9px 14px;border:1.5px solid var(--line);border-radius:999px;font-size:14px;cursor:pointer;background:#fff;transition:.12s}
+  .opts input:checked+span{border-color:var(--navy);background:var(--navy);color:#fff;font-weight:700}
+  .opts input:focus-visible+span{outline:3px solid #9cc0f0}
+  .hint{font-size:12.5px;color:var(--gray);margin-top:6px}
+  .btn{display:block;width:100%;border:0;border-radius:12px;background:var(--navy);color:#fff;font-size:16.5px;font-weight:700;padding:15px;cursor:pointer;font-family:inherit}
+  .btn:disabled{background:#a9b6c9;cursor:not-allowed}
+  .err{color:#c0392b;font-size:13.5px;margin-top:8px;min-height:1em}
+  #result{display:none}
+  .grade{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  .badge{font-weight:800;font-size:15px;padding:5px 12px;border-radius:8px}
+  .b-high{background:#fdecea;color:#b42318}.b-mid{background:#fff6dc;color:#8a5a00}.b-low{background:var(--okbg);color:var(--ok)}
+  .row{display:flex;gap:12px;padding:13px 0;border-top:1px solid var(--line)}
+  .row:first-of-type{border-top:0}
+  .tag{flex:0 0 92px;text-align:center;font-size:12.5px;font-weight:700;border-radius:8px;padding:5px 4px;height:fit-content}
+  .t-do{background:var(--warnbg);color:var(--warn)}
+  .t-post{background:var(--okbg);color:var(--ok)}
+  .t-chk{background:#eef3fa;color:var(--navy)}
+  .t-na{background:#f1f2f4;color:var(--gray)}
+  .row b{display:block;font-size:15px}
+  .row p{margin:2px 0 0;font-size:13.5px;color:var(--sub)}
+  .exposure{background:#fdf4f3;border:1px solid #f3d3cf;border-radius:10px;padding:12px 14px;font-size:14px;margin-top:12px}
+  .todo{margin:10px 0 0;padding-left:18px;font-size:14px}
+  .todo li{margin-bottom:4px}
+  .gate h2{font-size:19px;margin:0 0 4px}
+  .gate .lead{margin-bottom:14px;font-size:14px}
+  .field{margin-bottom:10px}
+  .field label{display:block;font-size:13.5px;font-weight:700;margin-bottom:4px}
+  .field input{width:100%;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;font-size:15px;font-family:inherit}
+  .field input:focus{outline:none;border-color:var(--navy)}
+  .consent{font-size:13px;color:var(--sub);margin:10px 0}
+  .consent label{display:flex;gap:8px;align-items:flex-start;margin-bottom:6px;cursor:pointer}
+  .consent input{margin-top:4px}
+  details{font-size:12.5px;color:var(--sub);margin:0 0 8px 24px}
+  details summary{cursor:pointer;color:var(--navy)}
+  .hp{position:absolute;left:-9999px}
+  .done{display:none;text-align:center;padding:10px 0}
+  .done b{font-size:18px;color:var(--navy)}
+  .upsell{font-size:14px;background:#eef3fa;border-radius:10px;padding:12px 14px}
+  footer{font-size:12px;color:var(--gray);margin-top:18px}
+  @media (max-width:480px){h1{font-size:22px}.tag{flex-basis:80px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand" id="brand"></div>
+    <h1>우리 회사 법정의무교육,<br>1분 만에 진단하세요</h1>
+    <p class="lead">6개 질문에 답하면 실제로 교육해야 하는 항목, 게시·배포로 끝나는 항목, 과태료 리스크를 바로 보여드립니다. 회원가입 없이 무료입니다.</p>
+  </header>
+
+  <form id="quiz" class="card" novalidate>
+    <div class="q"><h3><span>Q1</span>상시 근로자 수는?</h3>
+      <div class="opts" data-name="size">
+        <label><input type="radio" name="size" value="5인 미만"><span>5인 미만</span></label>
+        <label><input type="radio" name="size" value="5~9인"><span>5~9인</span></label>
+        <label><input type="radio" name="size" value="10~49인"><span>10~49인</span></label>
+        <label><input type="radio" name="size" value="50~299인"><span>50~299인</span></label>
+        <label><input type="radio" name="size" value="300인 이상"><span>300인 이상</span></label>
+      </div>
+    </div>
+    <div class="q"><h3><span>Q2</span>업종은?</h3>
+      <div class="opts">
+        <label><input type="radio" name="industry" value="제조업"><span>제조업</span></label>
+        <label><input type="radio" name="industry" value="건설업"><span>건설업</span></label>
+        <label><input type="radio" name="industry" value="도소매·음식·숙박"><span>도소매·음식·숙박</span></label>
+        <label><input type="radio" name="industry" value="IT·전문서비스"><span>IT·전문서비스</span></label>
+        <label><input type="radio" name="industry" value="교육·기타 서비스"><span>교육·기타 서비스</span></label>
+        <label><input type="radio" name="industry" value="기타"><span>기타</span></label>
+      </div>
+    </div>
+    <div class="q"><h3><span>Q3</span>직원 구성은?</h3>
+      <div class="opts">
+        <label><input type="radio" name="jobmix" value="전원 사무직"><span>전원 사무직</span></label>
+        <label><input type="radio" name="jobmix" value="현장직 포함"><span>현장직 포함 (생산·설치·배송·AS 등)</span></label>
+      </div>
+      <div class="hint">현장 업무를 하는 직원이 1명이라도 있으면 '현장직 포함'을 고르세요.</div>
+    </div>
+    <div class="q"><h3><span>Q4</span>퇴직연금 가입 형태는?</h3>
+      <div class="opts">
+        <label><input type="radio" name="pension" value="없음"><span>가입 안 함</span></label>
+        <label><input type="radio" name="pension" value="DB"><span>DB형</span></label>
+        <label><input type="radio" name="pension" value="DC"><span>DC형</span></label>
+        <label><input type="radio" name="pension" value="모름"><span>모르겠음</span></label>
+      </div>
+    </div>
+    <div class="q"><h3><span>Q5</span>고객이나 직원의 개인정보를 다루는 직원이 있나요?</h3>
+      <div class="opts">
+        <label><input type="radio" name="privacy" value="있음"><span>있음</span></label>
+        <label><input type="radio" name="privacy" value="없음"><span>없음</span></label>
+      </div>
+    </div>
+    <div class="q"><h3><span>Q6</span>작년 교육 증빙(수료증·명단·자료)을 보관하고 있나요?</h3>
+      <div class="opts">
+        <label><input type="radio" name="evidence" value="전부"><span>전부 있음</span></label>
+        <label><input type="radio" name="evidence" value="일부"><span>일부만</span></label>
+        <label><input type="radio" name="evidence" value="없음"><span>없음</span></label>
+      </div>
+    </div>
+    <button type="submit" class="btn" style="margin-top:22px">진단 결과 보기</button>
+    <div class="err" id="quizErr"></div>
+  </form>
+
+  <section id="result">
+    <div class="card">
+      <div class="grade"><span class="badge" id="gradeBadge"></span><b id="gradeText"></b></div>
+      <p class="lead" id="summary" style="margin:0 0 6px"></p>
+      <div id="rows"></div>
+      <div class="exposure" id="exposure" style="display:none"></div>
+      <ul class="todo" id="todo"></ul>
+    </div>
+
+    <div class="card gate" id="gate">
+      <h2>우리 회사 연간 교육 캘린더 받기</h2>
+      <p class="lead">진단 결과를 바탕으로 '언제, 무엇을, 몇 시간' 해야 하는지 월별 캘린더 1장을 이메일로 보내드립니다. 비용은 없고, 원치 않는 영업 연락은 하지 않습니다.</p>
+      <form id="lead" novalidate>
+        <div class="field"><label for="company">회사명 *</label><input id="company" name="company" autocomplete="organization" required></div>
+        <div class="field"><label for="name">담당자 이름 *</label><input id="name" name="name" autocomplete="name" required></div>
+        <div class="field"><label for="email">이메일 *</label><input id="email" name="email" type="email" autocomplete="email" required></div>
+        <div class="field"><label for="phone">연락처 (선택)</label><input id="phone" name="phone" type="tel" autocomplete="tel" placeholder="010-0000-0000"></div>
+        <input class="hp" type="text" name="website" id="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="consent">
+          <label><input type="checkbox" id="c1"> <span><b>[필수]</b> 개인정보 수집·이용에 동의합니다.</span></label>
+          <details><summary>내용 보기</summary>
+            수집 항목: 회사명, 담당자 이름, 이메일, 연락처(선택), 진단 응답<br>
+            이용 목적: 진단 결과 및 교육 캘린더 발송, 문의 응대<br>
+            보유 기간: 수집일로부터 1년 또는 동의 철회 시까지<br>
+            동의를 거부할 수 있으며, 거부 시 캘린더를 받을 수 없습니다.
+          </details>
+          <label><input type="checkbox" id="c2"> <span><b>[선택]</b> 교육·법령 변경 소식 등 광고성 정보를 이메일·문자로 받겠습니다.</span></label>
+          <details><summary>내용 보기</summary>
+            법정의무교육 일정 알림, 법령 변경 안내, 교육 프로그램 소식을 보내드립니다. 언제든 수신을 거부할 수 있으며, 동의하지 않아도 캘린더는 받을 수 있습니다.
+          </details>
+        </div>
+        <button type="submit" class="btn" id="leadBtn">캘린더 받기</button>
+        <div class="err" id="leadErr"></div>
+      </form>
+      <div class="done" id="done"><b>신청이 완료됐습니다.</b><p class="lead" style="margin:6px 0 0">24시간 안에 입력하신 이메일로 보내드리겠습니다.</p></div>
+    </div>
+
+    <div class="upsell">교육 담당자의 업무 시간이 부족하다면, AI로 교육 운영·보고 업무를 줄이는 실무 과정도 함께 안내해 드립니다. 캘린더 신청 시 함께 알려드릴게요.</div>
+  </section>
+
+  <footer>
+    이 진단은 2026년 11월 기준 공개 자료를 바탕으로 한 안내이며 법률 자문이 아닙니다. 업종·고용 형태에 따라 달라질 수 있으니, 적용 여부는 고용노동부(국번 없이 1350) 또는 공인노무사에게 확인하세요.<br>
+    <span id="contact"></span>
+  </footer>
+</div>
+
+<script>
+/* ===== 설정: 배포 전 이 3줄만 바꾸세요 ===== */
+const BRAND = "[상호명]";
+const CONTACT = "[상호명] · [이메일] · [연락처]";
+const WEBHOOK_URL = "/api/lead";  // Cloudflare Pages Function (functions/api/lead.js)
+/* ========================================== */
+
+document.getElementById('brand').textContent = BRAND;
+document.getElementById('contact').textContent = CONTACT;
+
+const SIZE_MIN = {"5인 미만":1,"5~9인":5,"10~49인":10,"50~299인":50,"300인 이상":300};
+let diag = null;
+
+function val(n){const el=document.querySelector(`input[name="${n}"]:checked`);return el?el.value:null;}
+
+function diagnose(a){
+  const n = SIZE_MIN[a.size];
+  const rows = [], required = [], todo = [];
+  // 1. 산업안전보건
+  if(n < 5){
+    rows.push({k:'na',t:'산업안전보건',d:'상시 5인 미만은 정기교육 대상이 아닙니다.'});
+  } else if(a.jobmix==='전원 사무직' && ['IT·전문서비스','교육·기타 서비스','기타'].includes(a.industry)){
+    rows.push({k:'chk',t:'산업안전보건',d:'사업장 전체가 사무직이고 법령이 정한 일부 업종(소프트웨어, 전문서비스 등)이면 정기교육이 제외될 수 있습니다. 사업자등록증의 업종코드로 확인이 필요합니다.'});
+    todo.push('산업안전보건교육 업종 예외 해당 여부 확인');
+  } else {
+    let h = a.jobmix==='현장직 포함' ? '사무·판매직 반기 6시간, 그 외 직원 반기 12시간 이상' : '반기 6시간 이상 (사무·판매직)';
+    if(a.industry==='도소매·음식·숙박' && n < 50) h += ' (50인 미만 도소매·음식·숙박업은 시간 감면 기준 확인)';
+    let d = h + '. 신규 채용 시에도 배치 전 교육이 필요합니다.';
+    if(a.jobmix==='현장직 포함') d += ' 관리감독자는 별도로 연 16시간입니다.';
+    rows.push({k:'do',t:'산업안전보건',d}); required.push('산업안전보건');
+    todo.push('상반기·하반기 안전보건교육 일정 잡기');
+  }
+  // 2. 성희롱 예방
+  if(n < 10){rows.push({k:'post',t:'성희롱 예방',d:'10인 미만은 교육자료 게시·배포로 대신할 수 있습니다. 게시 사진을 남겨 두세요.'});}
+  else {rows.push({k:'do',t:'성희롱 예방',d:'사업주 포함 전 직원 연 1회 이상. 과태료 500만 원 이하.'}); required.push('성희롱 예방');}
+  // 3. 장애인 인식개선
+  if(n < 50){rows.push({k:'post',t:'장애인 인식개선',d:'50인 미만은 교육자료 게시·배포로 대신할 수 있습니다.'});}
+  else {rows.push({k:'do',t:'장애인 인식개선',d:'전 직원 연 1회 1시간 이상. 직접 교육은 공단 양성과정 수료 강사만 가능. 과태료 300만 원 이하.'}); required.push('장애인 인식개선');}
+  // 4. 개인정보보호
+  if(a.privacy==='있음'){rows.push({k:'chk',t:'개인정보보호',d:'취급 직원 대상 연 1회 이상 권고. 미실시 자체 과태료는 없지만 유출 사고 시 불리합니다.'}); required.push('개인정보보호'); todo.push('개인정보 취급 직원 명단 정리 후 연 1회 교육');}
+  else {rows.push({k:'na',t:'개인정보보호',d:'개인정보 취급 직원이 없다면 우선순위가 낮습니다.'});}
+  // 5. 퇴직연금
+  if(a.pension==='DB'||a.pension==='DC'){rows.push({k:'do',t:'퇴직연금',d:'가입자 대상 연 1회 1시간 이상. 계약한 금융기관에 교육 제공 여부를 먼저 문의하세요. 과태료 1,000만 원 이하.'}); required.push('퇴직연금'); todo.push('퇴직연금 금융기관에 가입자 교육 요청');}
+  else if(a.pension==='모름'){rows.push({k:'chk',t:'퇴직연금',d:'가입돼 있다면 연 1회 교육 의무가 있습니다. 가입 여부부터 확인하세요.'}); todo.push('퇴직연금 가입 여부 확인');}
+  else {rows.push({k:'na',t:'퇴직연금',d:'퇴직연금 미가입 사업장은 해당 없습니다.'});}
+
+  if(a.evidence!=='전부') todo.unshift('수료증·명단·교육자료 3년치 보관 체계 만들기');
+
+  // 리스크 등급
+  const cnt = required.filter(x=>x!=='개인정보보호').length;
+  let grade;
+  if((a.evidence==='없음' && cnt>=1) || (a.evidence==='일부' && cnt>=2)) grade='높음';
+  else if(cnt===0 && a.evidence!=='없음') grade='낮음';
+  else grade='보통';
+
+  // 산업안전 노출액 (1차 적발 하한)
+  let exposure = null;
+  if(required.includes('산업안전보건') && a.evidence!=='전부'){
+    exposure = n*10; // 만원
+  }
+  return {rows, required, todo, grade, exposure, n};
+}
+
+function render(r){
+  const map={do:['t-do','교육 필요'],post:['t-post','게시·배포'],chk:['t-chk','확인 필요'],na:['t-na','해당 적음']};
+  document.getElementById('rows').innerHTML = r.rows.map(x=>`<div class="row"><span class="tag ${map[x.k][0]}">${map[x.k][1]}</span><div><b>${x.t}</b><p>${x.d}</p></div></div>`).join('');
+  const b=document.getElementById('gradeBadge');
+  b.textContent='리스크 '+r.grade; b.className='badge '+(r.grade==='높음'?'b-high':r.grade==='보통'?'b-mid':'b-low');
+  const doCnt = r.rows.filter(x=>x.k==='do').length;
+  document.getElementById('gradeText').textContent = doCnt ? `실제 교육이 필요한 항목 ${doCnt}개` : '실제 교육이 필요한 항목이 거의 없습니다';
+  document.getElementById('summary').textContent = r.grade==='높음' ? '교육 또는 증빙이 비어 있어, 점검을 받으면 과태료가 나올 수 있는 상태입니다.' : r.grade==='보통' ? '기본은 되어 있지만 빠진 부분을 채우면 안심할 수 있습니다.' : '현재 상태를 유지하면서 증빙만 잘 보관하면 됩니다.';
+  const ex=document.getElementById('exposure');
+  if(r.exposure){ex.style.display='block';ex.innerHTML=`산업안전보건교육은 과태료가 <b>인원수만큼 곱해집니다.</b> 1차 적발만으로도 최소 약 <b>${r.exposure.toLocaleString()}만 원</b>부터 시작할 수 있습니다. (1인당 10만 원 × 최소 인원 기준)`;}
+  else ex.style.display='none';
+  document.getElementById('todo').innerHTML = r.todo.length ? '<b style="display:block;margin-top:12px;font-size:14.5px">지금 할 일</b>'+r.todo.map(t=>`<li>${t}</li>`).join('') : '';
+}
+
+document.getElementById('quiz').addEventListener('submit',e=>{
+  e.preventDefault();
+  const a={size:val('size'),industry:val('industry'),jobmix:val('jobmix'),pension:val('pension'),privacy:val('privacy'),evidence:val('evidence')};
+  if(Object.values(a).some(v=>!v)){document.getElementById('quizErr').textContent='6개 질문에 모두 답해 주세요.';return;}
+  document.getElementById('quizErr').textContent='';
+  diag={answers:a,result:diagnose(a)};
+  render(diag.result);
+  const sec=document.getElementById('result');sec.style.display='block';
+  sec.scrollIntoView({behavior:'smooth'});
+});
+
+document.getElementById('lead').addEventListener('submit',async e=>{
+  e.preventDefault();
+  const err=document.getElementById('leadErr');
+  const company=document.getElementById('company').value.trim();
+  const name=document.getElementById('name').value.trim();
+  const email=document.getElementById('email').value.trim();
+  const phone=document.getElementById('phone').value.trim();
+  if(!company||!name||!email){err.textContent='회사명, 담당자 이름, 이메일을 입력해 주세요.';return;}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){err.textContent='이메일 형식을 확인해 주세요.';return;}
+  if(!document.getElementById('c1').checked){err.textContent='개인정보 수집·이용 동의(필수)에 체크해 주세요.';return;}
+  if(document.getElementById('website').value){return;} // 봇 차단
+  err.textContent='';
+  const btn=document.getElementById('leadBtn');btn.disabled=true;btn.textContent='보내는 중...';
+  const qs=new URLSearchParams(location.search);
+  const payload={
+    company,name,email,phone,
+    size:diag.answers.size,industry:diag.answers.industry,jobmix:diag.answers.jobmix,
+    pension:diag.answers.pension,privacy_handler:diag.answers.privacy==='있음'?'true':'false',
+    evidence:diag.answers.evidence,
+    required_trainings:diag.result.required.join(','),
+    risk:diag.result.grade,
+    consent_privacy:'true',
+    consent_marketing:document.getElementById('c2').checked?'true':'false',
+    source:qs.get('utm_source')||(document.referrer?new URL(document.referrer).hostname:'직접'),
+    submitted_at:new Date().toISOString()
+  };
+  try{
+    const res = await fetch(WEBHOOK_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...payload,website:document.getElementById('website').value})});
+    if(!res.ok) throw new Error('HTTP '+res.status);
+    document.getElementById('lead').style.display='none';
+    document.getElementById('done').style.display='block';
+  }catch(x){
+    btn.disabled=false;btn.textContent='캘린더 받기';
+    err.textContent='전송에 실패했습니다. 잠시 후 다시 시도하거나 아래 연락처로 문의해 주세요.';
+    console.log('submit error',x,payload);
+  }
+});
+</script>
+</body>
+</html>
