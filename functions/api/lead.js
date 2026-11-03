@@ -71,17 +71,30 @@ export async function onRequestPost({ request, env }) {
   };
   for (const k of Object.keys(properties)) if (properties[k] === undefined) delete properties[k];
 
+  // 복사·붙여넣기 때 섞여 들어간 공백·줄바꿈·따옴표 제거
+  const rawToken = String(env.NOTION_TOKEN ?? "");
+  const token = rawToken.trim().replace(/^["']|["']$/g, "");
+  const dbId = String(env.NOTION_DB_ID ?? "").trim();
+
   const res = await fetch("https://api.notion.com/v1/pages", {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${env.NOTION_TOKEN}`,
+      Authorization: `Bearer ${token}`,
       "Notion-Version": "2022-06-28",
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ parent: { database_id: env.NOTION_DB_ID }, properties }),
+    body: JSON.stringify({ parent: { database_id: dbId }, properties }),
   });
 
   if (!res.ok) {
+    // 토큰 전체는 남기지 않고, 형식 점검용 정보만 기록
+    console.log("token check", {
+      present: rawToken.length > 0,
+      rawLength: rawToken.length,
+      usedLength: token.length,
+      prefix: token.slice(0, 4),
+      hadWhitespace: rawToken !== rawToken.trim(),
+    });
     console.log("notion error", res.status, await res.text());
     return json({ ok: false, error: "notion_failed" }, 502);
   }
